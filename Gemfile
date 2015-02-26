@@ -44,6 +44,7 @@ group :development, :test do
   gem "annotation"
   gem "rspec-rails", "~> 3.1.0"
   gem "capybara"
+  #gem "capybara-webkit"
 end
 
 group :test do
@@ -53,5 +54,5 @@ group :test do
 end
 
 gem "slim-rails"
-gem 'pub_med_apps', :path => "/Users/ryanmoore/projects/gems/pub_med_apps"
+#gem 'pub_med_apps'
 gem "foundation-rails"

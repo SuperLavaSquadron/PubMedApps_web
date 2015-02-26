@@ -1,11 +1,18 @@
 .row
   h1 PubMed Flower
 
+
+
 .row
   = text_field_tag :pmid
-  = submit_tag "Blossom", class: "button radius tiny info"
+  /= submit_tag "Blossom", class: "button radius tiny info"
+  = submit_tag "Blossom", class: "button radius tiny info", :onclick => "rendering();"
   
   / = form_tag controller: "flowers", action: "flower"
   /   = label_tag :pmid, "Enter PMID:"
   /   = text_field_tag :pmid, '24007424'
   /   
+
+.row
+  = javascript_include_tag "flower.js"
+  = javascript_include_tag "d3.v3.min.js"

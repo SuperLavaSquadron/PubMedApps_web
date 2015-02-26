@@ -16,3 +16,7 @@
 !/log/.keep
 /tmp
 config/secrets.yml
+
+# Ignore autosaves
+*~
+*#
