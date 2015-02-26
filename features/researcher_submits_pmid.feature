@@ -12,26 +12,16 @@ Feature: researcher submits PMID
     Given I have not yet submitted a PMID
     When I submit a PMID
     Then I should see the query node
-    And I should see the related citation nodes
-  #   And I have typed my PMID in the search box
-  #   And PMID is actually valid
-  #   And PMID actually has related citations
-  #   When I click the Blossom button
-  #   Then I should see the query node
-  #   And I should see related citation nodes
+    And I should see related citation nodes
 
-  # Scenario: submit a PMID that has no related citations
-  #   Given I have not yet submitted a PMID
-  #   And I have typed my PMID in the search box
-  #   And PMID is actually valid
-  #   And PMID has no related citations
-  #   When I click the Blossom button
-  #   Then I should see only query node
-  #   And a message saying "No related citations"
+  Scenario: submit a PMID that has no related citations
+    Given I have not yet submitted a PMID
+    When I submit a PMID
+    Then I should see the query node
+    But I should not see related citation nodes
 
-  # Scenario: submit an invalid PMID (eg 'fahehe phage')
-  #   Given that I have not yet submitted a PMID
-  #   And that I have typed my PMID in the search box
-  #   And the PMID is invalid
-  #   When I click the Blossom button
-  #   Then I should see "The PMID is invalid"
+  Scenario: submit an invalid PMID (eg 'fahehe phage')
+    Given I have not yet submitted a PMID
+    When I submit a PMID that is invalid
+    Then I should see "The PMID is invalid"
+    But I should not see the query node

@@ -1,3 +1,8 @@
+module PubMedApps
+  class Citation
+  end
+end
+
 When /^I am on the home page$/ do
   visit root_path
 end
@@ -28,19 +33,24 @@ When /^I submit a PMID$/ do
   click_button "Blossom"
 end
 
+When /^I submit a PMID that is invalid$/ do
+  fill_in "PMID", with: "fahehe23"
+  click_button "Blossom"
+end
+
 When /^I should see the query node$/ do
-  expect(page).to have_css "svg > circle"
+  expect(page).to have_css "svg > circle.query"
 end
 
 When /^I should not see the query node$/ do
-  expect(page).not_to have_css "svg > circle"
+  expect(page).not_to have_css "svg > circle.query"
 end
 
-@todo
-When /^I should see the related citation nodes$/ do
-  # should i have 5 expectations in one example? This would be bad
-  # RSpec form, not sure if it is okay here
-  (1..5).each do |pmid|
-    expect(page).to have_css "svg > circle##{pmid}"
-  end
+When /^I should see related citation nodes$/ do
+  expect(page).to have_css "svg > circle.related"
 end
+
+# When /^I should not see related citation nodes$/ do
+#   expect(page).not_to have_css "svg > circle.related"
+# end
+
