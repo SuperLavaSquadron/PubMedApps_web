@@ -1,0 +1,11 @@
+.row
+  h1 PubMed Flower
+
+.row
+  = text_field_tag :pmid
+  = submit_tag "Blossom", class: "button radius tiny info"
+  
+  / = form_tag controller: "flowers", action: "flower"
+  /   = label_tag :pmid, "Enter PMID:"
+  /   = text_field_tag :pmid, '24007424'
+  /   
