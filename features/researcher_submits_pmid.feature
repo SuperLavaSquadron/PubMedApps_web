@@ -5,23 +5,18 @@ Feature: researcher submits PMID
   So that I can see related citations
 
   Scenario: before I submit a PMID
-    When I have not yet submitted a PMID
+    Given I am on the Flower page
+    And I have not yet submitted a PMID
     Then I should not see the query node
 
   Scenario: submit a PMID that has related citations
-    Given I have not yet submitted a PMID
+    Given I am on the Flower page
     When I submit a PMID
     Then I should see the query node
     And I should see related citation nodes
 
-  Scenario: submit a PMID that has no related citations
-    Given I have not yet submitted a PMID
-    When I submit a PMID
-    Then I should see the query node
-    But I should not see related citation nodes
-
   Scenario: submit an invalid PMID (eg 'fahehe phage')
-    Given I have not yet submitted a PMID
-    When I submit a PMID that is invalid
+    Given I am on the Flower page
+    When I submit an invalid PMID
     Then I should see "The PMID is invalid"
     But I should not see the query node

@@ -8,5 +8,5 @@ Feature: Researcher opens PubMed Flower app
     Given I am on the home page
     When I open the Flower page
     Then I should see "PubMed Flower"
-    And I should see a search box
-    And I should see a submit button
+    And I should see a "PMID" input box
+    And I should see a "Blossom" button
