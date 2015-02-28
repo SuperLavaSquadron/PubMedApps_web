@@ -1,0 +1,40 @@
+.row
+  h1 PubMed Flower (Text only)
+
+.row
+  = form_tag controller: "flowers", action: "text"
+    = label_tag :pmid, "Enter PMID:"
+    = text_field_tag :pmid
+    = submit_tag "Blossom", class: "button radius tiny info"
+
+-if @arg_error
+  .row
+    p = @arg_error
+- elsif @citation
+  .row  
+    h2 Query
+  .row
+    .query
+      h3 = @citation.title
+      ul
+        h4 Abstract
+        - if @citation.abstract.nil? || @citation.abstract.empty?
+          p Not available
+        - else
+          p = @citation.abstract
+  .row
+    h2 Related citations
+  - @related_citations.each do |citation|
+    .row
+      .related
+        h3 = link_to citation.title,
+          controller: "flowers", action: "text", pmid: citation.pmid
+        ul
+          p
+            | Score: 
+            = citation.score
+          h4 Abstract
+          p = citation.abstract
+      
+
+

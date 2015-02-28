@@ -1,5 +1,7 @@
 p = params
 
+= link_to "Text version", flower_text_path
+  
 .row
   h1 PubMed Flower
 
@@ -9,11 +11,6 @@ p = params
     = text_field_tag :pmid
     = submit_tag "Blossom", class: "button radius tiny info"
   
-  / 
-  /   
-  /   = text_field_tag :pmid, '24007424'
-  /   
-
 - if @arg_error
   .row
     p = @arg_error
