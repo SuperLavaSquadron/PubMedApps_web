@@ -1,14 +1,17 @@
 When /^I am on the (.*) page$/ do |page_name|
-
   page_elems = page_name.split(" ").map { |s| s.downcase }
-
+  
   if page_elems.count > 1
     visit page_elems.join "/"
   else
     if page_name.match /home/i
       visit root_path
     else
-      visit "/#{page_name}".downcase
+      #visit page_name.downcase.to_sym # original [BROKEN]
+      #visit (page_name + "_path").to_sym # [BROKEN]
+
+      #visit "/"+page_name.downcase # Prefix with the "/"
+      visit ("/"+page_name.downcase).to_sym
     end
   end
 end
@@ -54,9 +57,9 @@ end
 
 When /^I submit an? ?(.*) PMID$/ do |kind|
   if kind == "invalid"
-    fill_in "pmid", :with => "fahehe23"
+    fill_in "pmid", with: "fahehe23"
   elsif kind.empty?
-    fill_in "pmid", :with => "15"
+    fill_in "pmid", with: "15"
   else
     abort("ERROR: malfored scenario step")
   end

@@ -5,7 +5,7 @@ function rendering() {
   var width = 960,
   height = 500;
   var color = d3.scale.category20();
-  var lengthmultiplier = 150;
+  var lengthmultiplier = 400;
   
   var svg = d3.select("body").append("svg")
 	      .attr("width",width)
@@ -14,7 +14,7 @@ function rendering() {
   var force = d3.layout.force()
 		       .charge(-120)
 		       .gravity(0.1)
-		       .linkDistance(function(d){ return d.value*lengthmultiplier;})
+		       .linkDistance(function(d){ return (1 - d.value)*lengthmultiplier;})
 		       .size([width,height])
 
   force
@@ -26,15 +26,15 @@ function rendering() {
 		.data(jsondata.links)
 		  .enter().append("line")
 		  .attr("class", "link")
-		  .style("stroke-width", function(d) { return 5; })
+		  .style("stroke-width", function(d) { return 4; })
 		  .style("stroke",function(d){return "black"});
   
   var node = svg.selectAll(".node")
 		.data(jsondata.nodes)
 	 .enter().append("circle")
+	 .style("stroke-width",1)
 	 .attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
 	 .attr("r", 10)
-	 .style("fill", function(d) { return "red"; })
 	 .attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
 	 .call(force.drag);
   node.append("title")
