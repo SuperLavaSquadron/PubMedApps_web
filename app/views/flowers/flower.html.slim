@@ -1,18 +1,34 @@
+p = params
+
+= link_to "Text version", flower_text_path
+  
 .row
   h1 PubMed Flower
 
-
+.row
+  = form_tag controller: "flowers", action: "flower"
+    = label_tag :pmid, "Enter PMID:"
+    = text_field_tag :pmid
+    = submit_tag "Blossom", class: "button radius tiny info"
 
 .row
-  = text_field_tag :pmid
-  /= submit_tag "Blossom", class: "button radius tiny info"
-  = submit_tag "Blossom", class: "button radius tiny info", :onclick => "rendering();"
-  
-  / = form_tag controller: "flowers", action: "flower"
-  /   = label_tag :pmid, "Enter PMID:"
-  /   = text_field_tag :pmid, '24007424'
-  /   
-
-.row
-  = javascript_include_tag "flower.js"
+  = javascript_include_tag "flower"
   = javascript_include_tag "d3.v3.min.js"
+
+
+- if @arg_error
+  .row
+    p = @arg_error
+- elsif @citation and @related_json
+  p = @citation
+  .row
+      javascript:
+        jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
+        console.log("there are related citations");
+        rendering()
+
+
+
+
+
+

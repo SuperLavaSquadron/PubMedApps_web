@@ -20,3 +20,7 @@ config/secrets.yml
 # Ignore autosaves
 *~
 *#
+
+# Ignore gemfile.lock
+Gemfile.lock
+
