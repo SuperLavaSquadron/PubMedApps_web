@@ -14,17 +14,15 @@ p = params
 .row
   = javascript_include_tag "flower"
   = javascript_include_tag "d3.v3.min.js"
-
+  = stylesheet_link_tag "flower.css"
 
 - if @arg_error
   .row
     p = @arg_error
-- elsif @citation and @related_json
-  p = @citation
+- elsif @citation && @related_json
   .row
       javascript:
         jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
-        console.log("there are related citations");
         rendering()
 
 

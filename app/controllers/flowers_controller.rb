@@ -3,7 +3,8 @@ class FlowersController < ApplicationController
     if params[:pmid]
       begin
         @citation = PubMedApps::Citation.new params[:pmid]
-        @related_citations=@citation.related_citations
+        #@citation.related_citations
+        #@citation.normalize
         @related_json = @citation.to_json
       rescue ArgumentError => e
         @arg_error = "The PMID is invalid"
