@@ -55,6 +55,9 @@ group :test do
   gem "guard"
   gem "guard-rspec", require: false
   gem "guard-cucumber"
+  gem "capybara-webkit"
+  gem "launchy"
+  gem "capybara-screenshot"
 end
 
 gem "slim-rails"
