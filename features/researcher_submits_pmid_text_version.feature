@@ -16,9 +16,8 @@ Feature: researcher submits PMID (text only)
     And I have not yet submitted a PMID
     Then I should not see the query citation
 
-    @javascript
    Scenario: submit a PMID that has related citations
-     Given I am on the Flower page
+     Given I am on the Flower text page
      When I submit a PMID
      Then I should see the query citation
      And I should see related citations

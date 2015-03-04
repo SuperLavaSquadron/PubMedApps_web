@@ -19,7 +19,7 @@ p = params
 - if @arg_error
   .row
     p = @arg_error
-- elsif @citation and @related_json
+- elsif @citation && @related_json
   .row
       javascript:
         jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");

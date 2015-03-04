@@ -2,7 +2,7 @@ When /^I am on the (.*) page$/ do |page_name|
   page_elems = page_name.split(" ").map { |s| s.downcase }
   
   if page_elems.count > 1
-    visit page_elems.join "/"
+    visit "/"+ page_elems.join("/")
   else
     if page_name.match /home/i
       visit root_path
