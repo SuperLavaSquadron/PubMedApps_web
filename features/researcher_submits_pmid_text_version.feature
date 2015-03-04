@@ -9,6 +9,7 @@ Feature: researcher submits PMID (text only)
     And I see a "Text version" link to "/flower/text"
     When I click the "Text version" link
     Then I should see "PubMed Flower (Text only)"
+    
 
   Scenario: before I submit a PMID
     Given I am on the Flower text page
@@ -19,7 +20,6 @@ Feature: researcher submits PMID (text only)
      Given I am on the Flower text page
      When I submit a PMID
      Then I should see the query citation
-     And I should see "Related citations"
      And I should see related citations
 
   # Scenario: submit an invalid PMID (eg 'fahehe phage')

@@ -5,6 +5,18 @@
 # files.
 
 require 'cucumber/rails'
+require 'capybara/cucumber'
+require 'capybara-webkit'
+require 'capybara-screenshot/cucumber'
+
+# Select the default JS drive from Rack::Test
+Capybara.default_driver    = :webkit
+Capybara.javascript_driver = :webkit
+# Save pages for troubleshooting
+Capybara.save_and_open_page_path = 'tmp/'
+
+# Enable hidden elements
+Capybara.ignore_hidden_elements = false
 
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any

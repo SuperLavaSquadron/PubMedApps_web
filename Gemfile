@@ -55,8 +55,11 @@ group :test do
   gem "guard"
   gem "guard-rspec", require: false
   gem "guard-cucumber"
+  gem "capybara-webkit"
+  gem "launchy"
+  gem "capybara-screenshot"
 end
 
 gem "slim-rails"
-gem "pub_med_apps", :path => "/Users/ryanmoore/projects/gems/pub_med_apps"
+gem "pub_med_apps", :path => "/Users/Matthew/Projects/PubMedApps"
 gem "foundation-rails"
