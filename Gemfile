@@ -55,8 +55,12 @@ group :test do
   gem "guard"
   gem "guard-rspec", require: false
   gem "guard-cucumber"
+  gem "capybara-webkit"
+  gem "launchy"
+  gem "capybara-screenshot"
+  gem "therubyracer" # for cucmber to select js runtime
 end
 
 gem "slim-rails"
-gem "pub_med_apps", :path => "/Users/ryanmoore/projects/gems/pub_med_apps"
+gem "pub_med_apps", git: "https://github.com/mooreryan/PubMedApps.git"
 gem "foundation-rails"

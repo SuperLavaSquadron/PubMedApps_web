@@ -2,12 +2,16 @@ When /^I am on the (.*) page$/ do |page_name|
   page_elems = page_name.split(" ").map { |s| s.downcase }
   
   if page_elems.count > 1
-    visit page_elems.join "/"
+    visit "/"+ page_elems.join("/")
   else
     if page_name.match /home/i
       visit root_path
     else
-      visit page_name.downcase.to_sym
+      #visit page_name.downcase.to_sym # original [BROKEN]
+      #visit (page_name + "_path").to_sym # [BROKEN]
+
+      #visit "/"+page_name.downcase # Prefix with the "/"
+      visit ("/"+page_name.downcase).to_sym
     end
   end
 end
@@ -78,10 +82,11 @@ When /^I should see related citations$/ do
 end
 
 When /^I should ?(.*) see the query node$/ do |negate|
+  page.all(:css, '.related')
   if negate == "not"
-    expect(page).not_to have_css "svg > circle.query"
+    expect(page).not_to have_css ".query"
   elsif negate.empty?
-    expect(page).to have_css "svg > circle.query"
+    expect(page).to have_css ".query"
   else
     abort("ERROR: malfored scenario step")
   end
@@ -89,9 +94,9 @@ end
 
 When /^I should ?(.*) see related citation nodes$/ do |negate|
   if negate == "not"
-    expect(page).not_to have_css "svg > circle.related"
+    expect(page).not_to have_css ".node.related"
   elsif negate.empty?
-    expect(page).to have_css "svg > circle.related"
+    expect(page).to have_css ".node.related"
   else
     abort("ERROR: malfored scenario step")
   end
