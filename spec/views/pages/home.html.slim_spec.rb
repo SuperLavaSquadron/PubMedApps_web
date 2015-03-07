@@ -1,15 +1,18 @@
 # require 'rails_helper'
 
-# RSpec.describe "pages", type: :view do
-
-#   shared_examples_for "all pages" do
-#     expect(page).to have_selector "h1", text: heading
-#     expect(page).to have_title full_title page_title
+# RSpec.describe "pages/home.html.slim", :type => :view do
+#   it "has the navbar" do
+#     render
+#     expect(rendered).to have_css "nav.top-bar > ul.title-area"
+#     expect(rendered).to have_css "nav.top-bar > section.top-bar-section > ul.right"
 #   end
 
-#   RSpec.describe "pages/home.html.slim", :type => :view do
-#     before { visit root_path }
-#     it_should_behave_like "all pages"
-#     it { expect(page).not_to have_title "| PubMedApps" }
+#   it "has the proper links in the navbar" do
+#     render
+#     expect(rendered).to have_link "PubMedApps", href: root_path
+#     expect(rendered).to have_link "Flower", href: flower_path
+#     expect(rendered).to have_link "Flower (text_only)", href: flower_text_path
 #   end
 # end
+
+

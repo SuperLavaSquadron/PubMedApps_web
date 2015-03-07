@@ -4,9 +4,19 @@ include ApplicationHelper
 describe "pages" do
 
   subject { page }
-  
+
   shared_examples_for "all pages" do
-    it { should have_title full_title page_title }
+    describe "title" do
+      it { should have_title full_title page_title }
+    end
+
+    describe "nav bar" do
+      it { should have_css "nav.top-bar > ul.title-area" }
+      it { should have_css "nav.top-bar > section.top-bar-section > ul.right" }
+      it { should have_link "PubMedApps", href: root_path }
+      it { should have_link "Flower", href: flower_path }
+      it { should have_link "Flower (text only)", href: flower_text_path }
+    end
   end
 
   describe "pages/home.html.slim" do
