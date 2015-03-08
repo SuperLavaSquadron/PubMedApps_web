@@ -1,3 +1,7 @@
+= javascript_include_tag "flower"
+= javascript_include_tag "d3.v3.min.js"
+= stylesheet_link_tag "flower.css"
+
 - provide :title, "Flower"
 
 .row
@@ -9,19 +13,13 @@
     = text_field_tag :pmid
     = submit_tag "Blossom", class: "button radius tiny info"
 
-.row
-  = javascript_include_tag "flower"
-  = javascript_include_tag "d3.v3.min.js"
-  = stylesheet_link_tag "flower.css"
-
 - if @arg_error
   .row
     p = @arg_error
 - elsif @citation && @related_json
-  .row
-      javascript:
-        jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
-        rendering()
+    javascript:
+      jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
+      rendering()
 
 
 
