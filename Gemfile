@@ -58,8 +58,9 @@ group :test do
   gem "capybara-webkit"
   gem "launchy"
   gem "capybara-screenshot"
+  gem "therubyracer" # for cucmber to select js runtime
 end
 
 gem "slim-rails"
-gem "pub_med_apps", :path => "/Users/Matthew/Projects/PubMedApps"
+gem "pub_med_apps", git: "https://github.com/mooreryan/PubMedApps.git"
 gem "foundation-rails"

@@ -23,4 +23,3 @@ config/secrets.yml
 
 # Ignore gemfile.lock
 Gemfile.lock
-
