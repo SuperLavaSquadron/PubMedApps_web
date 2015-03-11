@@ -1,4 +1,5 @@
 class FlowersController < ApplicationController
+  respond_to :html, :js
   def flower
     if params[:pmid]
       begin
