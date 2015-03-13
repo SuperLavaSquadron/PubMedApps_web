@@ -1,87 +1,88 @@
 var test;
 
 function rendering() {
-  
-  var width = 960,
-  height = 500;
-  var color = d3.scale.category20();
-  var lengthmultiplier = 400;
-  
-  var svg = d3.select("body").append("svg")
-	      .attr("id","flowersvg")
-	      .attr("width",width)
-	      .attr("height",height);
-  
-  var force = d3.layout.force()
-		       .charge(-120)
-		       .gravity(0.1)
-		       .linkDistance(function(d){ return (1 - d.value)*lengthmultiplier;})
-		       .size([width,height])
+    
+    var width = 960,
+    height = 500;
+    // var color = d3.scale.category20();
+    var lengthmultiplier = 600;
+    var side = 20;
+    
+    var svg = d3.select("body")
+	.append("div").attr("class", "row")
+	.append("svg").attr("width",width).attr("height",height);
+    
+    var force = d3.layout.force()
+	.charge(-120)
+	.gravity(0.1)
+	.linkDistance(function(d){ return (1 - d.value)*lengthmultiplier;})
+	.size([width,height])
 
   force
-		       .nodes(jsondata.nodes)
-		       .links(jsondata.links)
-		       .start();
-  
+	.nodes(jsondata.nodes)
+	.links(jsondata.links)
+	.start();
+
   var link = svg.selectAll(".link")
 		.data(jsondata.links)
-		  .enter().append("line")
-		  .attr("class", "link")
-		  .style("stroke-width", function(d) { return 4; })
-		  .style("stroke",function(d){return "black"});
+	 .enter().append("line")
+	 .attr("class", "link")
+	 .style("stroke-width", function(d) { return 4; })
+	 .style("stroke",function(d){return "black"});
   
   var node = svg.selectAll(".node")
 		.data(jsondata.nodes)
-	 .enter().append("circle")
+	 .enter().append("rect")
 	 .style("stroke-width",1)
 	 .attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
-	 .attr("r", 10)
+	 .attr("width", side).attr("height", side).attr("rx", side).attr("ry", side)
 	 .attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
-	 .call(force.drag);
+	 .call(force.drag)
+	 .on("mouseover",function(d){
+	   selected = d3.select(this);
+	   selected.attr("width",side * 10)
+		   .attr("height",side * 5)
+	   tooltip.attr("transform","translate("+selected.attr("x")+","+selected.attr("y") +")")
+		   .classed("hidden",false);
+	   tooltext.text(d.PMID);
 
-  node.on("mouseover",function(d){
-    tooltip.attr("transform","translate("+d.x+","+d.y+")")
-	   .classed("hidden",false);
-    toolcircle.transition().duration(1000).attr("r",50)
-    tooltext.text(d.PMID);
-  })
+	   force.stop()
+
+	 }).on("mousemove",function(){
+	 }).on("mouseout",function(d){
+	   selected = d3.select(this);
+	   selected.attr("rx",side)
+		   .attr("ry",side)
+		   .attr("width",side)
+		   .attr("height",side)
+	   tooltip.classed("hidden",true);
+	 }).on("click",function(d){
+	   $(window.location.replace("/flower?pmid="+tooltext.text()));
+	 });
 
   var tooltip = svg.append("g")
 		   .attr("id","toolgroup")
 		   .classed("hidden",true)
 		   .attr("tranform","translate(20,20)");
-  var toolcircle = tooltip.append("circle")
-			  .attr("id","toolcircle")
-			  .attr("class","node")
-			  .attr("r",10)
-			  .attr("cx",0)
-			  .attr("cy",0)
-			  .on("click",function(d){
-			    $(window.location.replace("/flower?pmid="+tooltext.text()));
-
-			  }).on("mouseout",function(d){
-			    tooltip.classed("hidden",true);
-			    toolcircle.attr("r",10);
-			    tooltip.attr("transform","translate(0,0)");
-			  });
 
   var tooltext = tooltip.append("text")
 			.attr("id","tooltext")
-		 .attr("x",0)
-		 .attr("y",20)
-		 .text("this will be include an articles contents");
+		 .attr("x",50)
+		 .attr("y",50)
+		 .text("this will include an articles contents");
 
   node.append("title")
       .text(function(d) { return d.PMID; });
-  
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
     
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
-}
+    force.on("tick", function() {
+      link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+      
+      node
+	  .attr("x", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("x", d.x - (side/2) + 10); return d.x - (side/2); })
+          .attr("y", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("y", d.y - (side/2) + 16); return d.y - (side/2); })
 
+    })
+}

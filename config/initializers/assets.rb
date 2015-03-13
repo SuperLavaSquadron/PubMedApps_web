@@ -12,4 +12,4 @@ Rails.application.config.assets.paths += %w(vendor/assets/javascripts)
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Rails.application.config.assets.precompile += %w( flower.css flower.js d3.v3.min.js )
+Rails.application.config.assets.precompile += %w( flower.js d3.v3.min.js )

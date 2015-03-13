@@ -6,8 +6,8 @@ Feature: researcher submits PMID (text only)
 
   Scenario: I navigate to the text only Flower page
     Given I am on the Flower page
-    And I see a "Text version" link to "/flower/text"
-    When I click the "Text version" link
+    And I see a "Flower (text only)" link to "/flower/text"
+    When I click the "Flower (text only)" link
     Then I should see "PubMed Flower (Text only)"
     
 
