@@ -5,7 +5,7 @@ function rendering() {
     var width = 960,
     height = 500;
     // var color = d3.scale.category20();
-    var lengthmultiplier = 400;
+    var lengthmultiplier = 600;
     var side = 20;
     
     var svg = d3.select("body")
@@ -18,61 +18,71 @@ function rendering() {
 	.linkDistance(function(d){ return (1 - d.value)*lengthmultiplier;})
 	.size([width,height])
 
-    force
+  force
 	.nodes(jsondata.nodes)
 	.links(jsondata.links)
 	.start();
-    
-    var link = svg.selectAll(".link")
-	.data(jsondata.links)
-	.enter().append("line")
-	.attr("class", "link")
-	.style("stroke-width", function(d) { return 4; })
-	.style("stroke",function(d){return "black"});
-    
-    var node = svg.selectAll(".node")
-	.data(jsondata.nodes)
-	.enter().append("rect")
-	.style("stroke-width",1)
-	.attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
-	.attr("width", side).attr("height", side).attr("rx", side).attr("ry", side)
-	.attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
-	.call(force.drag)
-	.on("dblclick", function(){
-	    if (d3.select(this).attr("width") == side) {
-		var x = parseInt(d3.select(this).attr("x"), 10), y = parseInt(d3.select(this).attr("y"), 10), id = d3.select(this).attr("id"), idText = id.replace(/^.*_/, "");
-		
-		d3.select(this).transition().attr("width", side * 10).attr("height", side * 5).style("fill", "white").style("stroke", "black").style("stroke-width", "3");
-		var text = svg.append("text").attr("id", id).attr("x", x + 10).attr("y", y + 16).attr("dy", "1em").text("PMID: " + idText);
-		force.stop();
-		
-	    } else {
-		var type = d3.select(this).attr("class"), id = d3.select(this).attr("id");
 
-		svg.selectAll("text#" + id).remove();
-		if (type == "node query") {
-		    d3.select(this).transition().attr("width", side).attr("height", side).style("fill", "#00ACF6").style("stroke", "");
-		} else {
-		    d3.select(this).transition().attr("width", side).attr("height", side).style("fill", "#00F864").style("stroke", "");
-		}
-	    }
-	});
+  var link = svg.selectAll(".link")
+		.data(jsondata.links)
+	 .enter().append("line")
+	 .attr("class", "link")
+	 .style("stroke-width", function(d) { return 4; })
+	 .style("stroke",function(d){return "black"});
+  
+  var node = svg.selectAll(".node")
+		.data(jsondata.nodes)
+	 .enter().append("rect")
+	 .style("stroke-width",1)
+	 .attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
+	 .attr("width", side).attr("height", side).attr("rx", side).attr("ry", side)
+	 .attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
+	 .call(force.drag)
+	 .on("mouseover",function(d){
+	   selected = d3.select(this);
+	   selected.attr("width",side * 10)
+		   .attr("height",side * 5)
+	   tooltip.attr("transform","translate("+selected.attr("x")+","+selected.attr("y") +")")
+		   .classed("hidden",false);
+	   tooltext.text(d.PMID);
 
+	   force.stop()
 
-    
-    node.append("title")
-	.text(function(d) { return d.PMID; });
+	 }).on("mousemove",function(){
+	 }).on("mouseout",function(d){
+	   selected = d3.select(this);
+	   selected.attr("rx",side)
+		   .attr("ry",side)
+		   .attr("width",side)
+		   .attr("height",side)
+	   tooltip.classed("hidden",true);
+	 }).on("click",function(d){
+	   $(window.location.replace("/flower?pmid="+tooltext.text()));
+	 });
+
+  var tooltip = svg.append("g")
+		   .attr("id","toolgroup")
+		   .classed("hidden",true)
+		   .attr("tranform","translate(20,20)");
+
+  var tooltext = tooltip.append("text")
+			.attr("id","tooltext")
+		 .attr("x",50)
+		 .attr("y",50)
+		 .text("this will include an articles contents");
+
+  node.append("title")
+      .text(function(d) { return d.PMID; });
     
     force.on("tick", function() {
-	link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-	
-	node
-	    .attr("x", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("x", d.x - (side/2) + 10); return d.x - (side/2); })
-            .attr("y", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("y", d.y - (side/2) + 16); return d.y - (side/2); })
+      link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+      
+      node
+	  .attr("x", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("x", d.x - (side/2) + 10); return d.x - (side/2); })
+          .attr("y", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("y", d.y - (side/2) + 16); return d.y - (side/2); })
 
-    });
+    })
 }
-

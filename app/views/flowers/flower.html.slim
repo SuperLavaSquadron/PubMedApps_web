@@ -1,4 +1,4 @@
-= javascript_include_tag "flower"
+= javascript_include_tag "flower.js"
 = javascript_include_tag "d3.v3.min.js"
 
 - provide :title, "Flower"
@@ -16,10 +16,9 @@
   .row
     p = @arg_error
 - elsif @citation && @related_json
-    javascript:
-      jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
-      rendering()
-
+      javascript:
+        jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
+        rendering()
 
 
 

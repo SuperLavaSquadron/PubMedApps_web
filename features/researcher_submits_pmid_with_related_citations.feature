@@ -7,7 +7,6 @@ Feature: researcher submits PMID
   Scenario: submit a PMID that has related citations
     Given I am on the flower page
     And I have not yet submitted a PMID
-
     And I have typed my PMID in the search box
     And PMID is valid
     And PMID has related citations
