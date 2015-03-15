@@ -102,3 +102,44 @@ When /^I should ?(.*) see related citation nodes$/ do |negate|
   end
 end
 
+# researcher_hovers_over_node.feature
+
+When /^I see the PubMed Flower$/ do
+  visit flower_path
+  fill_in "pmid", with: "15"
+  click_button "Blossom"
+end
+
+When /^I should see the query node's info$/ do
+  @query = find "circle.query"
+  have_node_info @query
+end
+
+When /^I hover my mouse over a node$/ do
+  # the find method will randomly fail, this is the same problem as
+  # the bug I put on trello
+  @node = find "circle.related:last-child"
+  @node.trigger :mouseover
+end
+
+When /^I move my mouse out of the node$/ do
+  @node.trigger :mouseout
+end
+
+When /^I should see that node's info$/ do
+  have_node_info @node
+end
+
+# When /^I should not see that node's info$/ do
+#   not_have_node_info @node
+# end
+  
+def have_node_info node
+  expect(page).to have_content node["pmid"]  
+  expect(page).to have_content node["title"]
+  expect(page).to have_content node["abstract"]  
+end  
+
+def not_have_node_info node
+  # technically it still has it, it's just white so you cant see it
+end  
