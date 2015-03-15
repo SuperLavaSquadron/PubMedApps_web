@@ -16,10 +16,20 @@
   .row
     p = @arg_error
 - elsif @citation && @related_json
-      javascript:
-        jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
-        rendering()
+  .row
+    .small-7.large-7.columns#flowersvg
+    .small-5.large-5.columns#flowertext
+      h4#h4pmid
+      p#pmid
 
+      h4#h4title
+      p#title
+        
+      h4#h4abstract
+      p#abstract
+  javascript:
+    jsondata = jQuery.parseJSON("#{j @related_json.html_safe}");
+      rendering()
 
 
 

@@ -2,15 +2,14 @@ var test;
 
 function rendering() {
     
-    var width = 960,
-    height = 500;
+    var height = 500;
     // var color = d3.scale.category20();
     var lengthmultiplier = 600;
-    var side = 20;
-    
-    var svg = d3.select("body")
-	.append("div").attr("class", "row")
-	.append("svg").attr("width",width).attr("height",height);
+    var radius = 10;
+
+    var width = document.getElementById("flowersvg").clientWidth;
+    var svg = d3.select("body #flowersvg")
+	.append("div").append("svg").attr("width",width).attr("height",height);
     
     var force = d3.layout.force()
 	.charge(-120)
@@ -18,71 +17,108 @@ function rendering() {
 	.linkDistance(function(d){ return (1 - d.value)*lengthmultiplier;})
 	.size([width,height])
 
-  force
+    force
 	.nodes(jsondata.nodes)
 	.links(jsondata.links)
 	.start();
 
-  var link = svg.selectAll(".link")
-		.data(jsondata.links)
-	 .enter().append("line")
-	 .attr("class", "link")
-	 .style("stroke-width", function(d) { return 4; })
-	 .style("stroke",function(d){return "black"});
-  
-  var node = svg.selectAll(".node")
-		.data(jsondata.nodes)
-	 .enter().append("rect")
-	 .style("stroke-width",1)
-	 .attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
-	 .attr("width", side).attr("height", side).attr("rx", side).attr("ry", side)
-	 .attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
-	 .call(force.drag)
-	 .on("mouseover",function(d){
-	   selected = d3.select(this);
-	   selected.attr("width",side * 10)
-		   .attr("height",side * 5)
-	   tooltip.attr("transform","translate("+selected.attr("x")+","+selected.attr("y") +")")
-		   .classed("hidden",false);
-	   tooltext.text(d.PMID);
+    var link = svg.selectAll(".link")
+	.data(jsondata.links)
+	.enter().append("line")
+	.attr("class", "link")
+	.style("stroke-width", function(d) { return 4; })
+	.style("stroke",function(d){return "black"});
+    
+    var node = svg.selectAll(".node")
+	.data(jsondata.nodes)
+	.enter().append("circle")
+	.style("stroke-width",1)
+	.attr("class", function(d) { return (d.PMID == jsondata.nodes[0].PMID) ? "node query" : "node related"})
+	.attr("r", function(d) {
+	    if (d.PMID == jsondata.nodes[0].PMID) { // if it is the query node
+		enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
+		enterText(d3.select("#flowertext > p#pmid"), d.PMID);
+		enterText(d3.select("#flowertext > h4#h4title"), "Title")
+		enterText(d3.select("#flowertext > p#title"), d.title);
+		enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
+		enterText(d3.select("#flowertext > p#abstract"), d.abstract);
+		return radius * 2
+	    } else {
+		return radius
+	    }
+	})
+	.attr("cx", width / 2).attr("cy", height / 2)
+	.attr("id",function(d){return (d.PMID == jsondata.nodes[0].PMID) ? ("query_"+d.PMID) : ("related_"+d.PMID);})
+	.call(force.drag)
+	.on("mouseover",function(d){
+	    force.stop();
 
-	   force.stop()
+	    selected = d3.select(this);
+	    if (selected.attr("r") == radius) {
+		selected.transition().attr("r", radius * 2);
 
-	 }).on("mousemove",function(){
-	 }).on("mouseout",function(d){
-	   selected = d3.select(this);
-	   selected.attr("rx",side)
-		   .attr("ry",side)
-		   .attr("width",side)
-		   .attr("height",side)
-	   tooltip.classed("hidden",true);
-	 }).on("click",function(d){
-	   $(window.location.replace("/flower?pmid="+tooltext.text()));
-	 });
+		enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
+		enterText(d3.select("#flowertext > p#pmid"), d.PMID);
+		enterText(d3.select("#flowertext > h4#h4title"), "Title")
+		enterText(d3.select("#flowertext > p#title"), d.title);
+		enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
+		enterText(d3.select("#flowertext > p#abstract"), d.abstract);
+	    }
+	}).on("click",function(d){
+	    // TODO this doesn't actually do what I want...what I want
+	    // is if you click once, it will "override" the mouseout,
+	    // ie if you click the node once, when you mouseout, the
+	    // text won't disappear until the next time you mouseover
+	    // and then mousout of a node
+	    selected = d3.select(this);
+	    selected.transition().attr("r", radius * 2);
 
-  var tooltip = svg.append("g")
-		   .attr("id","toolgroup")
-		   .classed("hidden",true)
-		   .attr("tranform","translate(20,20)");
+	    enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
+	    enterText(d3.select("#flowertext > p#pmid"), d.PMID);
+	    enterText(d3.select("#flowertext > h4#h4title"), "Title")
+	    enterText(d3.select("#flowertext > p#title"), d.title);
+	    enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
+	    enterText(d3.select("#flowertext > p#abstract"), d.abstract);
+	}).on("mouseout",function(d){
+	    selected = d3.select(this);
+	    selected.transition().attr("r", radius);
 
-  var tooltext = tooltip.append("text")
-			.attr("id","tooltext")
-		 .attr("x",50)
-		 .attr("y",50)
-		 .text("this will include an articles contents");
+	    exitText(d3.select("#flowertext > h4#h4pmid"));
+	    exitText(d3.select("#flowertext > p#pmid"));
+	    exitText(d3.select("#flowertext > h4#h4title"));
+	    exitText(d3.select("#flowertext > p#title"));
+	    exitText(d3.select("#flowertext > h4#h4abstract"));
+	    exitText(d3.select("#flowertext > p#abstract"));
+	}).on("dblclick",function(d){
+	    $(window.location.replace("/flower?pmid="+d.PMID));
+	});
 
-  node.append("title")
-      .text(function(d) { return d.PMID; });
+    node.append("title")
+	.text(function(d) { return d.PMID; });
     
     force.on("tick", function() {
-      link.attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
-      
-      node
-	  .attr("x", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("x", d.x - (side/2) + 10); return d.x - (side/2); })
-          .attr("y", function(d) { var theID = d3.select(this).attr("id"); d3.selectAll("text#" + theID).attr("y", d.y - (side/2) + 16); return d.y - (side/2); })
+	link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+	
+	node
+	    .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
+    });
+};
 
-    })
+function enterText(selected, text) {
+    selected
+	.style("color", "white")
+	.transition()
+	.text(text)
+	.style("color", "black")
+}
+
+function exitText(selected) {
+    selected
+	.style("color", "black")
+	.transition()
+	.style("color", "white")
 }
