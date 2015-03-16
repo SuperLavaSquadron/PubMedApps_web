@@ -1,8 +1,9 @@
-Feature: Researcher hovers over node
+Feature: Researcher interacts with PubMed Flower
 
   As a researcher
-  I want to hover over a node
-  So I can see its info in the sidebar
+  I want to interact with the Flower
+  So I can explore the literature in a novel way
+  # Merges the hover-over-node feature and node links to article features
 
   Scenario: before I hover over a node
     Given I see the PubMed Flower

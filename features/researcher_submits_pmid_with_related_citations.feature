@@ -3,7 +3,6 @@ Feature: researcher submits PMID
   I want to submit a PMID
   So that I can see related citations
   
-  @javascript
   Scenario: submit a PMID that has related citations
     Given I am on the flower page
     And I have not yet submitted a PMID

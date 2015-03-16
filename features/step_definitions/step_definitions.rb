@@ -27,6 +27,7 @@ When /^I open the (.*) page$/ do |page_name|
 end
 
 When /^I click the "(.*)" link$/ do |link_name|
+
   click_link link_name
 end
 
@@ -102,11 +103,12 @@ When /^I should ?(.*) see related citation nodes$/ do |negate|
   end
 end
 
-# researcher_hovers_over_node.feature
+# Graphical display [5 steps]
 
 When /^I see the PubMed Flower$/ do
+  @original_query_pmid = "15"
   visit flower_path
-  fill_in "pmid", with: "15"
+  fill_in "pmid", with: @original_query_pmid
   click_button "Blossom"
 end
 
@@ -119,6 +121,7 @@ When /^I hover my mouse over a node$/ do
   # the find method will randomly fail, this is the same problem as
   # the bug I put on trello
   @node = find "circle.related:last-child"
+  @hover_pmid = @node[:id].split("_")[-1]
   @node.trigger :mouseover
 end
 
@@ -128,6 +131,58 @@ end
 
 When /^I should see that node's info$/ do
   have_node_info @node
+end
+
+When /^I click the (.*) node$/ do |kind|
+  @node = first("." << kind) unless @node
+  @node.trigger(:click)
+end
+
+When /^I should go to a new flower page$/ do
+  new_query_pmid = find(".query")[:id]
+  expect(@original_query_pmid).to_not eq(new_query_pmid)
+end
+
+Given /^I have typed my PMID in the search box$/ do
+  fill_in 'pmid', :with => '12345'
+end
+
+Given /^PMID is valid$/ do
+  find_field('pmid').value.match /[0-9]+/
+end
+
+Given /^PMID has related citations$/ do
+  #pending("implemented PMID related verification")
+  find_field('pmid')
+end
+
+Given /^I click the (.*) button$/ do |button|
+  click_button button
+end
+
+Given /^show me the page$/ do
+  save_and_open_page
+  screenshot_and_save_page
+end
+
+# Linking to PubMed [3 steps]
+Given /^I see the PubMed url$/ do
+  @pubmed_url_base = "http://www.ncbi.nlm.nih.gov/pubmed/"
+  link = find_link('pubmedlink')[:href]
+  expect(link).to include(@pubmed_url_base)
+end
+
+When /^I click the PubMed link$/ do
+  # Custom step that allows content from pubmed.gov
+
+  link_name = "View article"
+  page.driver.allow_url "www.ncbi.nlm.nih.gov"
+  page.driver.allow_url "static.pubmed.gov"
+  click_link link_name
+end
+
+Then /^I should go to the articles PubMed page$/ do
+  expect(@pubmed_url_base + @hover_pmid).to eq(current_url)
 end
 
 # When /^I should not see that node's info$/ do

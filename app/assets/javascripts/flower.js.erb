@@ -1,7 +1,7 @@
 var test;
 
 function rendering() {
-    
+    var pubmed_url_base = "http://www.ncbi.nlm.nih.gov/pubmed/"
     var height = 500;
     // var color = d3.scale.category20();
     var lengthmultiplier = 600;
@@ -52,43 +52,22 @@ function rendering() {
 	.call(force.drag)
 	.on("mouseover",function(d){
 	    force.stop();
+	  d3.selectAll(".related")
+	    .transition()
+	    .attr("r",radius);
 
 	    selected = d3.select(this);
-	    if (selected.attr("r") == radius) {
-		selected.transition().attr("r", radius * 2);
-
-		enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
-		enterText(d3.select("#flowertext > p#pmid"), d.PMID);
-		enterText(d3.select("#flowertext > h4#h4title"), "Title")
-		enterText(d3.select("#flowertext > p#title"), d.title);
-		enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
-		enterText(d3.select("#flowertext > p#abstract"), d.abstract);
-	    }
-	}).on("click",function(d){
-	    // TODO this doesn't actually do what I want...what I want
-	    // is if you click once, it will "override" the mouseout,
-	    // ie if you click the node once, when you mouseout, the
-	    // text won't disappear until the next time you mouseover
-	    // and then mousout of a node
-	    selected = d3.select(this);
-	    selected.transition().attr("r", radius * 2);
-
-	    enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
-	    enterText(d3.select("#flowertext > p#pmid"), d.PMID);
-	    enterText(d3.select("#flowertext > h4#h4title"), "Title")
-	    enterText(d3.select("#flowertext > p#title"), d.title);
-	    enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
-	    enterText(d3.select("#flowertext > p#abstract"), d.abstract);
-	}).on("mouseout",function(d){
-	    selected = d3.select(this);
-	    selected.transition().attr("r", radius);
-
-	    exitText(d3.select("#flowertext > h4#h4pmid"));
-	    exitText(d3.select("#flowertext > p#pmid"));
-	    exitText(d3.select("#flowertext > h4#h4title"));
-	    exitText(d3.select("#flowertext > p#title"));
-	    exitText(d3.select("#flowertext > h4#h4abstract"));
-	    exitText(d3.select("#flowertext > p#abstract"));
+	  selected.transition().attr("r", radius * 2);
+	  enterText(d3.select("#flowertext > h4#h4pmid"), "PMID")
+	  enterText(d3.select("#flowertext > p#pmid"), d.PMID);
+	  enterText(d3.select("#flowertext > h4#h4title"), "Title")
+	  enterText(d3.select("#flowertext > p#title"), d.title);
+	  enterText(d3.select("#flowertext > h4#h4abstract"), "Abstract")		
+	  enterText(d3.select("#flowertext > p#abstract"), d.abstract);
+	  enterText(d3.select("#flowertext > h4#h4pubmedlink"), "PubMed");
+	  d3.select("#flowertext > a#pubmedlink")
+	    .attr("href",pubmed_url_base + d.PMID)
+	    .text("View article");
 	}).on("dblclick",function(d){
 	    $(window.location.replace("/flower?pmid="+d.PMID));
 	});
