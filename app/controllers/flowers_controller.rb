@@ -9,6 +9,9 @@ class FlowersController < ApplicationController
         @arg_error = "The PMID is invalid"
       end
     end
+    if request.xhr?
+      render json: @related_json
+    end
   end
 
   def text

@@ -58,7 +58,6 @@ group :test do
   gem "capybara-webkit"
   gem "launchy"
   gem "capybara-screenshot"
-  gem "therubyracer" # for cucmber to select js runtime
 end
 
 gem "slim-rails"

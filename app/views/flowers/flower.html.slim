@@ -11,7 +11,7 @@
     = label_tag :pmid, "Enter PMID:"
     = text_field_tag :pmid
     = submit_tag "Blossom", class: "button radius tiny info"
-    = link_to "Try it!", flower_path(:pmid => "25313075"), :method => :post
+    = link_to "Demo", flower_path(:pmid => "25313075"), :method => :post, class: "button radius tiny info"
 
 - if @arg_error
   .row
