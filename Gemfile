@@ -62,6 +62,6 @@ group :test do
 end
 
 gem "slim-rails"
-gem "pub_med_apps", git: "https://github.com/mooreryan/PubMedApps.git"
+gem "pub_med_apps", git: "https://github.com/SuperLavaSquadron/PubMedApps.git"
 gem "foundation-rails"
 gem "responders"
