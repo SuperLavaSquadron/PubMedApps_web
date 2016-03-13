@@ -62,5 +62,5 @@ end
 
 gem "slim-rails"
 gem "pub_med_apps", git: "https://github.com/SuperLavaSquadron/PubMedApps.git"
-gem "foundation-rails"
+gem "foundation-rails", "5.5.1.0"
 gem "responders"
